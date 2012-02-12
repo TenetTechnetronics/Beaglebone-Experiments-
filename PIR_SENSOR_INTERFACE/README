@@ -1,0 +1,8 @@
+This experiment mainly deals with interfacing a PIR human detection sensor with the beaglebone. 
+
+The C file needed for the same is provided in the folder 
+sensor.c
+
+For more information on connecting the sensor to the beaglebone visit our youtube channel at http://youtube.com/tenetworld
+
+and in case you have queries, please feel free to contact us at info@tenettech.com
