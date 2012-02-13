@@ -1,6 +1,20 @@
+
+/*********************************************************************
+ * sensor.c -- Program to detect motion using PIR sensor on Beaglebone
+ * Usage: Runs the program and turns ON the buzzer and LED when motion 
+	  is detected
+ *********************************************************************/
+
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+
+#define LED "38"
+#define Buzzer "35"
+#define PIR  "34"
+
+#define MUX1 "2"
+#define MUX2 "3"
 
 char set_value[8];
 char buffer[100];
@@ -16,18 +30,19 @@ void unexport(char gpio[8]);
 int main()
 {
 	
-	int pirstate=0;  //Initial state of the PIR sensor
+	int pirstate=0;//To detect the state of sensor
 	char st[8];
-	mux("2");
-	mux("3");
 
-	export("38");  //LED // Export the PINs so that they could be used 
-	export("34");  //BUZZER
-	export("35");  // PIR Sensor
+	mux(MUX1);
+	mux(MUX2);
+
+	export(LED);
+	export(Buzzer);
+	export(PIR);
 	
-	direction("38","out"); // Configure the PIn mode (output/input)
-	direction("35","out");
-	direction("34","in");
+	direction(LED,"out");//set LED as output
+	direction(Buzzer,"out");//set buzzer as output
+	direction(PIR,"in");//Set PIR sensor as input
 
 	while(1)
 	{
@@ -41,7 +56,6 @@ int main()
 		{
 			fgets(st,sizeof(st),fp);
 			i=atoi(st);
-			// printf("The value is: %d\n",i);  // Provided just in case u need to debug
 		}
 		else
 		{
@@ -59,9 +73,9 @@ int main()
 				printf("Motion Detected\n");
 				pirstate=1;
 				// Glow LED
-				value("38","1");
+				value(LED,"1");
 				//Buzzer ON
-				value("35","1");
+				value(Buzzer,"1");
 			}
 	
 		}
@@ -72,17 +86,17 @@ int main()
 				printf("Motion Ended\n");
 				pirstate=0;
 				// LED OFF
-				value("38","0");
+				value(LED,"0");
 				//Buzzer OFF
-				value("35","0");
+				value(Buzzer,"0");
 			
 			}
         	}
      }
 	
-	unexport("38");
-	unexport("34");
-	unexport("35");
+	unexport(LED);
+	unexport(Buzzer);
+	unexport(PIR);
      
 	return 0;
 }
